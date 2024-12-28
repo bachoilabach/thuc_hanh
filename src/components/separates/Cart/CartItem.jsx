@@ -5,7 +5,7 @@ export default function CartItem({ name, img, color, size, amount = 0, price,onR
 		<div className="flex space-x-2 relative">
 			<img src={img} className="rounded-md" width={90} height={106} />
 			<div>
-				<p className="font-bold text-[16px]">{name}</p>
+				<p className="font-bold text-[16px] pr-4">{name}</p>
 				<p>Màu sắc: {color}</p>
 				<p>Size: {size}</p>
 				<div className="flex justify-between">

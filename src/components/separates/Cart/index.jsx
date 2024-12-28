@@ -23,9 +23,10 @@ export default function Cart() {
 			
 			return result + Number(price[0]);
 		}, 0);
-		
-		return result+',000'
-	}, []);
+		const mili = Math.floor(result/1000)
+		const remainder = result % 1000
+		return mili + ',' + remainder+ ',000'
+	}, [cart]);
 	return (
 		<div>
 			<Badge count={cart.length} className="hover:cursor-pointer pt-1">
