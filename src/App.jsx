@@ -1,12 +1,26 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './index.css';
-import Child from './Child';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import MainLayout from './layout/MainLayout';
+import HomePage from './pages/HomePage';
+import CollectionPage from './pages/CollectionPage';
 function App() {
 	return (
-		<div className="p-5 text-3xl font-semibold">
-			<Child />
-			<Child />
-		</div>
+		<>
+			<BrowserRouter>
+				<Routes>
+					<Route path="/" element={<MainLayout />}>
+						<Route index element={<HomePage />} />
+						<Route
+							path="collections/best-seller"
+							element={<CollectionPage />}
+						/>
+					</Route>
+				</Routes>
+			</BrowserRouter>
+			<ToastContainer stacked={true} theme="light" position="bottom-left" />
+		</>
 	);
 }
 
