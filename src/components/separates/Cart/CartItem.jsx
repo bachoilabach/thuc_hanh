@@ -26,6 +26,6 @@ CartItem.propTypes = {
 	price: PropTypes.string.isRequired,
 	color: PropTypes.string.isRequired,
 	size: PropTypes.string.isRequired,
-	amount: PropTypes.string.isRequired,
+	amount: PropTypes.number.isRequired,
     onRemoveFromCart: PropTypes.func.isRequired
 };
