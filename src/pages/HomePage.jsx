@@ -7,15 +7,21 @@ import rightArrow from '/public/right-arrow.svg';
 import Product from '../components/generals/Product';
 import { useDispatch, useSelector } from 'react-redux';
 import { productSelector } from '../app/selector';
-import cartSlice from '../components/separates/Cart/cartSlice';
+import { addToCart } from '../components/separates/Cart/cartSlice';
+import { useEffect } from 'react';
+import { fetchProduct } from '../components/generals/Product/ProductSlice';
 
 export default function HomePage() {
 	const products = useSelector(productSelector);
 
 	const dispatch = useDispatch();
 	const handleAddToCart = (product) => {
-		dispatch(cartSlice.actions.addToCart(product));
+		// dispatch(cartSlice.actions.addToCart(product));
+		dispatch(addToCart(product))
 	};
+	useEffect(()=>{
+		dispatch(fetchProduct())
+	},[])
 	return (
 		<div className="pt-20">
 			<MyCarousel />
@@ -69,8 +75,8 @@ export default function HomePage() {
 							name={product.name}
 							img={product.img}
 							price={product.price}
-							key={product.id}
-							onAddToCart={()=>handleAddToCart(product)}
+							key={product._id}
+							onAddToCart={() => handleAddToCart(product)}
 						/>
 					))}
 				</div>

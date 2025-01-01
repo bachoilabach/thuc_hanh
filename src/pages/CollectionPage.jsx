@@ -4,13 +4,16 @@ import { productsFilterByPriceSelector } from '../app/selector';
 import { useEffect } from 'react';
 import cartSlice from '../components/separates/Cart/cartSlice';
 import Filter from '../components/generals/Filter';
+import { fetchProduct } from '../components/generals/Product/ProductSlice';
 export default function CollectionPage() {
 	const products = useSelector(productsFilterByPriceSelector);
 	const dispatch = useDispatch();
 	const handleAddToCart = (product) => {
 		dispatch(cartSlice.actions.addToCart(product));
 	};
-	useEffect(() => {}, []);
+	useEffect(() => {
+		dispatch(fetchProduct())
+	}, []);
 
 	return (
 		<div className="pt-28 flex flex-col sm:flex-row px-32 mb-10">

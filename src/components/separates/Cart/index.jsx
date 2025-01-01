@@ -1,11 +1,11 @@
 import { Badge, Button, Drawer } from 'antd';
 import cartIcon from '/public/cart.svg';
 import cartIcon1 from '/public/f7--cart.svg';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartSelector } from '../../../app/selector';
 import CartItem from './CartItem';
-import cartSlice from './cartSlice';
+import { fetchCart, removeFromCart } from './cartSlice';
 export default function Cart() {
 	const [open, setOpen] = useState(false);
 	const handleOpenCart = () => {
@@ -15,18 +15,25 @@ export default function Cart() {
 	const cart = useSelector(cartSelector);
 	const dispatch = useDispatch();
 	const handleRemoveFromCart = (productId) => {
-		dispatch(cartSlice.actions.removeFromCart(productId));
+		// dispatch(cartSlice.actions.removeFromCart(productId));
+		dispatch(removeFromCart(productId))
 	};
 	const total = useMemo(() => {
 		const result = cart.reduce((result, prod) => {
-			const price = prod.price.split(',')
 			
-			return result + Number(price[0]);
+			const price = prod.productId?.price?.replace(/[^0-9]/g, '');
+			return result + Number(price) * prod.quantity;
 		}, 0);
-		const mili = Math.floor(result/1000)
-		const remainder = result % 1000
-		return mili + ',' + remainder+ ',000'
+
+		const mili = Math.floor(result / 1000000);
+		const remainder = (result % 1000000) / 1000;
+
+		return mili + ',' + remainder + ',000';
 	}, [cart]);
+
+	useEffect(() => {
+		dispatch(fetchCart());
+	}, []);
 	return (
 		<div>
 			<Badge count={cart.length} className="hover:cursor-pointer pt-1">
@@ -46,20 +53,23 @@ export default function Cart() {
 					</div>
 				) : (
 					<div>
-						{cart.map((prod) => (
-							<div key={prod.id}>
-								<CartItem
-									name={prod.name}
-									img={prod.img}
-									color={prod.color}
-									size={prod.size}
-									amount={prod.amount}
-									price={prod.price}
-									onRemoveFromCart={() => handleRemoveFromCart(prod.id)}
-								/>
-								<div className="border-t-2 w-full my-6" />
-							</div>
-						))}
+						{cart.map((item) => {
+							const product = item.productId; 
+							return (
+								<div key={item._id}>
+									<CartItem
+										name={product.name}
+										img={product.img}
+										color={product.color}
+										size={product.size}
+										amount={item.quantity}
+										price={product.price}
+										onRemoveFromCart={() => handleRemoveFromCart(item._id)}
+									/>
+									<div className="border-t-2 w-full my-6" />
+								</div>
+							);
+						})}
 					</div>
 				)}
 

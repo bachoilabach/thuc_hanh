@@ -1,8 +1,8 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-export const productSelector = (state) => state.products;
+export const productSelector = (state) => state.products.items;
 
-export const cartSelector = (state) => state.cart;
+export const cartSelector = (state) => state.cart.items;
 
 export const filterSelector = (state) => state.filter.sort;
 
@@ -12,7 +12,6 @@ export const productsFilterByPriceSelector = createSelector(
 	productSelector,
 	filterSelector,
 	(products, filter) => {
-		console.log();
 		switch (filter) {
 			case 'asc':
 				return [...products].sort(
