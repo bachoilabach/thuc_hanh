@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import Product from '../components/generals/Product';
-import { productsFilterByPriceSelector } from '../app/selector';
+import { productsFilterSelector } from '../app/selector';
 import { useEffect } from 'react';
 import cartSlice from '../components/separates/Cart/cartSlice';
 import Filter from '../components/generals/Filter';
 import { fetchProduct } from '../components/generals/Product/ProductSlice';
 export default function CollectionPage() {
-	const products = useSelector(productsFilterByPriceSelector);
+	const products = useSelector(productsFilterSelector);
 	const dispatch = useDispatch();
 	const handleAddToCart = (product) => {
 		dispatch(cartSlice.actions.addToCart(product));

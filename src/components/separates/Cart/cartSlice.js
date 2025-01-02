@@ -22,8 +22,6 @@ const cartSlice = createSlice({
 			}),
 			builder.addCase(addToCart.fulfilled, (state, action) => {
 				state.status = 'succeeded';
-				const cartItem = action.payload;
-				console.log(cartItem);
 				state.items.push(action.payload);
 			}),
 			builder.addCase(removeFromCart.fulfilled, (state, action) => {
