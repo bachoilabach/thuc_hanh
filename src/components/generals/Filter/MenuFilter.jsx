@@ -11,18 +11,9 @@ const menuItems = [
 		title: 'Màu sắc',
 		type: 'circle',
 		options: [
-			{
-				label: 'den',
-				value: 'black',
-			},
-			{
-				label: 'xanh',
-				value: 'green',
-			},
-			{
-				label: 'hong',
-				value: 'pink',
-			},
+			{ label: 'den', value: 'black' },
+			{ label: 'xanh', value: 'green' },
+			{ label: 'hong', value: 'pink' },
 		],
 	},
 	{ id: 'gender', title: 'Giới tính', type: 'radio', options: ['Nam', 'Nữ'] },
@@ -30,15 +21,23 @@ const menuItems = [
 
 export default function MenuFilter() {
 	const [expanded, setExpanded] = useState({});
-    const dispatch = useDispatch()
-    // eslint-disable-next-line no-unused-vars
-    const [color,setColor] = useState('')
+	const dispatch = useDispatch();
+	const [color, setColor] = useState('');
+	const [gender, setGender] = useState('');
 	const contentRefs = useRef({});
 
-    const handleChangeColor = (value) => {
-        setColor(value)
-        dispatch(filterSlice.actions.setColor(value))
-    }
+	const handleChangeColor = (value) => {
+		setColor(value);
+		dispatch(filterSlice.actions.setColor(value));
+	};
+
+	const handleChangeGender = (event) => {
+		let value = event.target.value.toLowerCase();
+		setGender(value);
+		value === 'nam' ? 'nam' : value = 'nu';
+		dispatch(filterSlice.actions.setGender(value));
+	};
+
 	const toggleExpand = (id) => {
 		setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
 	};
@@ -52,8 +51,10 @@ export default function MenuFilter() {
 						className="flex text-base font-semibold justify-between cursor-pointer pt-1"
 						onClick={() => toggleExpand(item.id)}>
 						<p>{item.title}</p>
-
-						<img src={expanded[item.id] ? minusIcon : plusIcon} />
+						<img
+							src={expanded[item.id] ? minusIcon : plusIcon}
+							alt="toggle-icon"
+						/>
 					</div>
 
 					{/* Nội dung */}
@@ -67,39 +68,48 @@ export default function MenuFilter() {
 						}}>
 						<div className="mt-2 space-y-2">
 							{/* Render tùy thuộc vào type */}
-							<div className="grid grid-cols-6 gap-5">
-								{item.type === 'circle' &&
-									item.options.map((option, index) => (
+							{item.type === 'circle' && (
+								<div className="grid grid-cols-6 gap-5">
+									{item.options.map((option, index) => (
 										<Tooltip
+											key={index}
 											className="hover:cursor-pointer"
 											placement="bottom"
-											title={option.label}
-                                            onClick={()=>handleChangeColor(option.label)}
-											key={index}>
+											title={option.label}>
 											<span
-												className="w-10 min-h-10 rounded-full border border-gray-400 inline-block"
+												className={`w-10 min-h-10 rounded-full border border-gray-400 inline-block ${
+													color === option.value ? 'border-blue-500' : ''
+												}`}
 												style={{ backgroundColor: option.value }}
+												onClick={() => handleChangeColor(option.label)}
 											/>
 										</Tooltip>
 									))}
-							</div>
+								</div>
+							)}
 
-							{item.type === 'radio' &&
-								item.options.map((option, index) => (
-									<div key={index} className="flex items-center space-x-2">
-										<input
-											type="radio"
-											id={`${item.id}-${option}`}
-											name={item.id}
-											className="cursor-pointer"
-										/>
-										<label
-											htmlFor={`${item.id}-${option}`}
-											className="cursor-pointer">
-											{option}
-										</label>
-									</div>
-								))}
+							{item.type === 'radio' && (
+								<div className="space-y-2">
+									{item.options.map((option, index) => (
+										<div key={index} className="flex items-center space-x-2">
+											<input
+												type="radio"
+												id={`${item.id}-${option}`}
+												name={item.id}
+												value={option}
+												checked={gender === option.toLowerCase()}
+												onChange={handleChangeGender}
+												className="cursor-pointer"
+											/>
+											<label
+												htmlFor={`${item.id}-${option}`}
+												className="cursor-pointer">
+												{option}
+											</label>
+										</div>
+									))}
+								</div>
+							)}
 						</div>
 					</div>
 
